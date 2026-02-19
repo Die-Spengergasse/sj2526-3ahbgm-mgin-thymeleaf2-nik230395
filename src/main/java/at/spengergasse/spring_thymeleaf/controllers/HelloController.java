@@ -16,4 +16,9 @@ public class HelloController {
         model.addAttribute("today", LocalDate.now().format(dtf));
         return "index";
     }
+
+    @GetMapping("/test")
+    public String hello() {
+        return "test";
+    }
 }
