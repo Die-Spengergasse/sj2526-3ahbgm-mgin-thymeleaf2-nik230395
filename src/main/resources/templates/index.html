@@ -1,17 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Greeting</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <title>Patientenverwaltung</title>
 </head>
 <body>
-<div class="container">
-    <h1>Hallo</h1>
-    Datum: <span th:text="${today}"></span>
-    <div>
-        <a href="/patient/list">patient list</a>
-    </div>
-</div>
+<!-- save, edit, delete-->
+  <h1>Patientenverwaltung</h1>
+    <a href="/patients/new">Neuen Patienten hinzufügen</a>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Alter</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="patient : ${patients}">
+          <td th:text="${patient.id}">1</td>
+          <td th:text="${patient.name}">Max Mustermann</td>
+          <td th:text="${patient.birthday}">01-01-2001</td>
+          <td>
+            <a th:href="@{/patients/edit/{id}(id=${patient.id})}">Bearbeiten</a>
+            <a th:href="@{/patients/delete/{id}(id=${patient.id})}">Löschen</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 </body>
 </html>

@@ -1,18 +1,13 @@
 package at.spengergasse.spring_thymeleaf.controllers;
 
 import at.spengergasse.spring_thymeleaf.entities.Patient;
-import at.spengergasse.spring_thymeleaf.entities.PatientRepository;
+import at.spengergasse.spring_thymeleaf.repositories.PatientRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.time.format.DateTimeFormatter;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/patient")
+@RequestMapping("/patients")
 public class PatientController {
     private final PatientRepository patientRepository;
 
@@ -20,21 +15,47 @@ public class PatientController {
         this.patientRepository = patientRepository;
     }
 
-    @GetMapping("/list")
-    public String patients(Model model) {
-        model.addAttribute("patients", patientRepository.findAll());
-        return "patlist";
+    @GetMapping
+    public String index(Model model) { // landet auf /patients
+        model.addAttribute("patients", patientRepository.findAll()); // key patients, value liste
+        model.addAttribute("patient", new Patient()); // key patient, value neues Patient Objekt
+        return "index"; // index.html gerendert
     }
 
-    @GetMapping("/add")
-    public String addPatient(Model model) {
-        model.addAttribute("patient", new Patient());
-        return "add_patient";
+    // Erstmal für neuen Patienten anlegen
+    @GetMapping("/new")
+    public String newForm(Model model) { // Patient klickt in idnex auf new dann landet er hier
+        model.addAttribute("patient", new Patient()); // key patient
+        return "new"; // return mal website
     }
 
+    // dann zum commiten
     @PostMapping("/add")
-    public String addPatient(@ModelAttribute("patient") Patient patient) {
-        patientRepository.save(patient);
-        return  "redirect:/patient/list";
+    public String addPatient(@ModelAttribute Patient patient) { // nach button click in new.html
+        patientRepository.save(patient); // speichert
+        return "redirect:/patients"; // zurück auf home
+    }
+
+    // editieren Formular
+    @GetMapping("/edit/{id}")
+    public String editForm(@PathVariable Long id, Model model) { // edit seite / id aus url
+        model.addAttribute("patient", patientRepository.findById(id).orElseThrow()); // zeig patient id key
+        return "edit"; // gib id
+    }
+
+    // editieren
+    @PostMapping("/edit/{id}")
+    public String editPatient(@PathVariable Long id ,@ModelAttribute Patient updatedPatient) {
+        Patient existing = patientRepository.findById(id).orElseThrow();
+        existing.setName(updatedPatient.getName());
+        existing.setBirthday(updatedPatient.getBirthday());
+        patientRepository.save(existing);
+        return "redirect:/patients";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deletePatient(@PathVariable Long id) {
+        patientRepository.deleteById(id);
+        return "redirect:/patients";
     }
 }
