@@ -5,9 +5,10 @@
 
 Folgende Funktionalitäten sollen realisiert werden:
 
-* Daten für ein neues Objekt eingeben und Objekt speichern
-* Alle vorhandenen Objekte in einer Tabelle anzeigen
-* Ein bestehendes Objekt löschen
-* Ein bestehendes Objekt aktualisieren
+* Daten für ein neues Objekt eingeben und Objekt speichern JA
+* Alle vorhandenen Objekte in einer Tabelle anzeigen JA
+* Ein bestehendes Objekt löschen JA
+* Ein bestehendes Objekt aktualisieren JA
+* SORTIEREN: Alle vorhandenen Objekte nach einem Attribut sortieren NOCH NICHT
 ---
 #### Die Abgabe erfolgt nicht auf Moodle sondern auf GitHub Classroom (commit + push)

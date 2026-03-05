@@ -2,6 +2,7 @@ package at.spengergasse.spring_thymeleaf.controllers;
 
 import at.spengergasse.spring_thymeleaf.entities.Patient;
 import at.spengergasse.spring_thymeleaf.repositories.PatientRepository;
+import at.spengergasse.spring_thymeleaf.services.PatientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +11,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/patients")
 public class PatientController {
     private final PatientRepository patientRepository;
+    private final PatientService patientService;
 
-    public PatientController(PatientRepository patientRepository) {
+    public PatientController(PatientRepository patientRepository, PatientService patientService) {
         this.patientRepository = patientRepository;
+        this.patientService = patientService;
     }
 
     @GetMapping
     public String index(Model model) { // landet auf /patients
-        model.addAttribute("patients", patientRepository.findAll()); // key patients, value liste
+        model.addAttribute("patients", patientService.getSortedPatients()); // key patients, value liste
         model.addAttribute("patient", new Patient()); // key patient, value neues Patient Objekt
         return "index"; // index.html gerendert
     }
@@ -53,6 +56,8 @@ public class PatientController {
         return "redirect:/patients";
     }
 
+
+    //löschen halt
     @GetMapping("/delete/{id}")
     public String deletePatient(@PathVariable Long id) {
         patientRepository.deleteById(id);

@@ -3,17 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>Patientenverwaltung</title>
+  <style>
+    * {
+      font-family: Arial, sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
 <!-- save, edit, delete-->
-  <h1>Patientenverwaltung</h1>
-    <a href="/patients/new">Neuen Patienten hinzufügen</a>
+  <h1>Bürgerverwaltung</h1>
+    <a href="/patients/new">Neuen Bürger hinzufügen</a>
     <table>
       <thead>
         <tr>
           <th>ID</th>
           <th>Name</th>
-          <th>Alter</th>
+          <th>Geburtstag</th>
           <th>Aktionen</th>
         </tr>
       </thead>
