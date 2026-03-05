@@ -14,7 +14,10 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
-    public List<Patient> getSortedPatients() {
-        return patientRepository.findAllSortedByBirthday();
+    public List<Patient> getSortedPatientsAsc() {
+        return patientRepository.findAllSortedByBirthdayAsc();
+    }
+    public List<Patient> getSortedPatientsDesc() {
+        return patientRepository.findAllSortedByBirthdayDesc();
     }
 }

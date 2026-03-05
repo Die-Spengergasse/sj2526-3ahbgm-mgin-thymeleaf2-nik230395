@@ -19,10 +19,13 @@ public class PatientController {
     }
 
     @GetMapping
-    public String index(Model model) { // landet auf /patients
-        model.addAttribute("patients", patientService.getSortedPatients()); // key patients, value liste
-        model.addAttribute("patient", new Patient()); // key patient, value neues Patient Objekt
-        return "index"; // index.html gerendert
+    public String index(@RequestParam(value = "sort", defaultValue = "asc") String sort, Model model) {
+        if (sort.equals("desc")) {
+            model.addAttribute("patients", patientService.getSortedPatientsDesc());
+        } else {
+            model.addAttribute("patients", patientService.getSortedPatientsAsc());
+        }
+        return "index";
     }
 
     // Erstmal für neuen Patienten anlegen
