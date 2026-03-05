@@ -4,49 +4,67 @@
   <meta charset="UTF-8">
   <title>Patientenverwaltung</title>
   <style>
-    * {
-      font-family: Arial, sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-    th {
-      background-color: #f2f2f2;
-      text-align: left;
-    }
+    * { font-family: Arial, sans-serif; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background-color: #f2f2f2; text-align: left; }
+    .active { font-weight: bold; text-decoration: none; }
   </style>
 </head>
 <body>
-<!-- save, edit, delete-->
-  <h1>Bürgerverwaltung</h1>
-    <a href="/patients/new">Neuen Bürger hinzufügen</a>
-    <a href="/patients?sort=asc">Sortiere Aufsteigend</a>
-    <a href="/patients?sort=desc">Sortiere Absteigend</a>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Geburtstag</th>
-          <th>Aktionen</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="patient : ${patients}">
-          <td th:text="${patient.id}">1</td>
-          <td th:text="${patient.name}">Max Mustermann</td>
-          <td th:text="${patient.birthday}">01-01-2001</td>
-          <td>
-            <a th:href="@{/patients/edit/{id}(id=${patient.id})}">Bearbeiten</a>
-            <a th:href="@{/patients/delete/{id}(id=${patient.id})}">Löschen</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<h1>Bürgerverwaltung</h1>
+<a href="/patients/new">Neuen Bürger hinzufügen</a>
+<a th:href="@{/patients(sort='asc', page=0)}">Sortiere Aufsteigend</a>
+<a th:href="@{/patients(sort='desc', page=0)}">Sortiere Absteigend</a>
+
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Geburtstag</th>
+    <th>Aktionen</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="patient : ${patientPage.content}">
+    <td th:text="${patient.id}">1</td>
+    <td th:text="${patient.name}">Max Mustermann</td>
+    <td th:text="${patient.birthday}">01-01-2001</td>
+    <td>
+      <a th:href="@{/patients/edit/{id}(id=${patient.id})}">Bearbeiten</a>
+      <a th:href="@{/patients/delete/{id}(id=${patient.id})}">Löschen</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+
+
+<div>
+  <a th:if="${currentPage > 0}"
+     th:href="@{/patients(page=${currentPage - 1}, size=${patientPage.size}, sort=${sort})}">
+    Zurück
+  </a>
+
+  <span th:each="i : ${#numbers.sequence(0, patientPage.totalPages - 1)}">
+      <a th:href="@{/patients(page=${i}, size=${patientPage.size}, sort=${sort})}"
+         th:text="${i + 1}"
+         th:classappend="${i == currentPage} ? 'active'">
+      </a>
+    </span>
+
+  <a th:if="${patientPage.hasNext()}"
+     th:href="@{/patients(page=${currentPage + 1}, size=${patientPage.size}, sort=${sort})}">
+    Weiter
+  </a>
+</div>
+
+<p>
+  Seite <span th:text="${currentPage + 1}"></span>
+  von <span th:text="${patientPage.totalPages}"></span>
+  &nbsp;|&nbsp;
+  Gesamt: <span th:text="${patientPage.totalElements}"></span> Einträge
+</p>
 </body>
 </html>

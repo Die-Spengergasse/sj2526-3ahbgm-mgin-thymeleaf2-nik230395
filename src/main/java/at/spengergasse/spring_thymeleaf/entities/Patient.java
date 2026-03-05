@@ -1,6 +1,7 @@
 package at.spengergasse.spring_thymeleaf.entities;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -15,6 +16,7 @@ public class Patient {
     @Column(name = "p_name")
     private String name;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "p_birthday")
     private LocalDate birthday;
 

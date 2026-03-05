@@ -3,6 +3,7 @@ package at.spengergasse.spring_thymeleaf.controllers;
 import at.spengergasse.spring_thymeleaf.entities.Patient;
 import at.spengergasse.spring_thymeleaf.repositories.PatientRepository;
 import at.spengergasse.spring_thymeleaf.services.PatientService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,17 @@ public class PatientController {
     }
 
     @GetMapping
-    public String index(@RequestParam(value = "sort", defaultValue = "asc") String sort, Model model) {
-        if (sort.equals("desc")) {
-            model.addAttribute("patients", patientService.getSortedPatientsDesc());
-        } else {
-            model.addAttribute("patients", patientService.getSortedPatientsAsc());
-        }
+    public String index(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sort", defaultValue = "asc") String sort,
+            Model model)
+    {
+        Page<Patient> patientPage = patientService.getPatientsPaged(page, size, sort);
+
+        model.addAttribute("patientPage", patientPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("sort", sort);
         return "index";
     }
 

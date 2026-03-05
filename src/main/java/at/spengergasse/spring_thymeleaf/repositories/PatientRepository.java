@@ -9,9 +9,4 @@ import java.util.List;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient,Long> {
-    @Query("SELECT p FROM Patient p ORDER BY p.birthday asc")
-    List<Patient> findAllSortedByBirthdayAsc();
-
-    @Query("SELECT p FROM Patient p ORDER BY p.birthday desc")
-    List<Patient> findAllSortedByBirthdayDesc();
 }

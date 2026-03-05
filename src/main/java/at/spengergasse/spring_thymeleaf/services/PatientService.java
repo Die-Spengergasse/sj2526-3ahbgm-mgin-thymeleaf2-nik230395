@@ -2,9 +2,11 @@ package at.spengergasse.spring_thymeleaf.services;
 
 import at.spengergasse.spring_thymeleaf.entities.Patient;
 import at.spengergasse.spring_thymeleaf.repositories.PatientRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PatientService {
@@ -14,10 +16,12 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
-    public List<Patient> getSortedPatientsAsc() {
-        return patientRepository.findAllSortedByBirthdayAsc();
-    }
-    public List<Patient> getSortedPatientsDesc() {
-        return patientRepository.findAllSortedByBirthdayDesc();
+    public Page<Patient> getPatientsPaged(int page, int size, String sort) {
+        Sort sortOrder = sort.equals("desc")
+                ? Sort.by("birthday").descending()
+                : Sort.by("birthday").ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+        return patientRepository.findAll(pageable);
     }
 }
